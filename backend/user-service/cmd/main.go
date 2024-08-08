@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -25,10 +28,30 @@ func testDBconnected(db *gorm.DB){
 }
 
 func main() {
+	app := fiber.New()
+	
 	err := godotenv.Load()
 		if err != nil {
 			log.Fatal("Error loading .env file")
 		}
+
+	app.Use(cors.New(cors.Config{
+			Next:             nil,
+			AllowOriginsFunc: nil,
+			AllowOrigins:     "*",
+			AllowMethods: strings.Join([]string{
+				fiber.MethodGet,
+				fiber.MethodPost,
+				fiber.MethodHead,
+				fiber.MethodPut,
+				fiber.MethodDelete,
+				fiber.MethodPatch,
+			}, ","),
+			AllowHeaders:     "",
+			AllowCredentials: false,
+			ExposeHeaders:    "",
+			MaxAge:           0,
+		}))
 	
 	dsn := os.Getenv("DATABASE_CONNECTION_STRING")
 	if dsn == "" {
@@ -44,4 +67,10 @@ func main() {
 	//test get 1st row from table 'user_test'
 	testDBconnected(db)
    
+	app.Get("/", func(c *fiber.Ctx) error {
+        return c.SendString("Hello, Fiber!")
+    })
+	if err := app.Listen(fmt.Sprintf(":%s", os.Getenv("PORT"))); err != nil {
+		log.Fatal(err)
+	}
 }
