@@ -1,6 +1,7 @@
 package database
 
 import (
+	"expense-tracker/models"
 	"fmt"
 	"os"
 
@@ -11,8 +12,7 @@ import (
 func ConnectDB() (*gorm.DB, error) {
     dbUser := os.Getenv("POSTGRES_USER")
     dbPassword := os.Getenv("POSTGRES_PASSWORD")
-    // dbName := os.Getenv("POSTGRES_DB")
-	dbName := "test"
+    dbName := os.Getenv("POSTGRES_DB")
     dbHost := os.Getenv("POSTGRES_HOST")
     dbPort := os.Getenv("POSTGRES_PORT")
 
@@ -25,6 +25,9 @@ func ConnectDB() (*gorm.DB, error) {
         return nil, err
     }
 
-
+    err = db.AutoMigrate(&models.User{})
+    if err != nil {
+        return nil, fmt.Errorf("failed to auto-migrate models: %w", err)
+    }
     return db, nil
 }
