@@ -2,14 +2,14 @@ package services
 
 import (
 	"errors"
-	"expense-tracker/models"
+	"expense-tracker/models/userModels"
 	"expense-tracker/repositories"
 
 	"expense-tracker/utils"
 )
 
 type IAuthService interface {
-    RegisterUser(registerReq models.RegisterRequest) error
+    RegisterUser(registerReq userModels.RegisterRequest) error
 }
 
 type AuthService struct {
@@ -22,7 +22,7 @@ func NewAuthService(userRepo repositories.IAuthRepository) IAuthService {
     }
 }
 
-func (s *AuthService) RegisterUser(registerReq models.RegisterRequest) error {
+func (s *AuthService) RegisterUser(registerReq userModels.RegisterRequest) error {
 	//check if user exist?
     if exists, _ := s.userRepo.UserExists(registerReq.Username, registerReq.Email); exists {
         return errors.New("user already exists")
@@ -34,7 +34,7 @@ func (s *AuthService) RegisterUser(registerReq models.RegisterRequest) error {
         return errors.New("failed to hash password")
     }
 
-    user := models.User{
+    user := userModels.User{
         UserID:       registerReq.Username, 
         Username:     registerReq.Username,
         PasswordHash: hashedPassword,

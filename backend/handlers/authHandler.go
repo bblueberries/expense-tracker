@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"expense-tracker/models"
+	"expense-tracker/models/userModels"
 	"expense-tracker/services"
 	"log"
 
@@ -23,7 +23,7 @@ func NewAuthHandler(authService services.IAuthService) IAuthHandler {
 }
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error {
-    var registerReq models.RegisterRequest
+    var registerReq userModels.RegisterRequest
 
     // handle data 
     if err := c.BodyParser(&registerReq); err != nil {

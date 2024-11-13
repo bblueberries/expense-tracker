@@ -1,7 +1,7 @@
 package database
 
 import (
-	"expense-tracker/models"
+	"expense-tracker/models/userModels"
 	"fmt"
 	"os"
 
@@ -25,7 +25,7 @@ func ConnectDB() (*gorm.DB, error) {
         return nil, err
     }
 
-    err = db.AutoMigrate(&models.User{})
+    err = db.AutoMigrate(&userModels.User{})
     if err != nil {
         return nil, fmt.Errorf("failed to auto-migrate models: %w", err)
     }
