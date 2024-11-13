@@ -25,7 +25,7 @@ func (r *AuthRepository) UserExists(username, email string) (bool, error) {
 	var count int64
 
     err := r.db.Model(&userModels.User{}).
-        Where("username = ? OR email = ?", username, email).
+        Where("username = ? AND email = ?", username, email).
         Count(&count).
         Error
 
