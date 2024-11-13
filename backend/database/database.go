@@ -1,9 +1,10 @@
 package database
 
 import (
-	"expense-tracker/models/userModels"
 	"fmt"
 	"os"
+
+	"github.com/bblueberries/expense-tracker/models/userModels"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

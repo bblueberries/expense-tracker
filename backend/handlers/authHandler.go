@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"expense-tracker/models/userModels"
-	"expense-tracker/response"
-	"expense-tracker/services"
 	"log"
+
+	"github.com/bblueberries/expense-tracker/models/userModels"
+	"github.com/bblueberries/expense-tracker/response"
+	"github.com/bblueberries/expense-tracker/services"
 
 	"github.com/gofiber/fiber/v2"
 )

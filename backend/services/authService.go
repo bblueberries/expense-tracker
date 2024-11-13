@@ -2,10 +2,11 @@ package services
 
 import (
 	"errors"
-	"expense-tracker/models/userModels"
-	"expense-tracker/repositories"
 
-	"expense-tracker/utils"
+	"github.com/bblueberries/expense-tracker/models/userModels"
+	"github.com/bblueberries/expense-tracker/repositories"
+
+	"github.com/bblueberries/expense-tracker/utils"
 )
 
 type IAuthService interface {

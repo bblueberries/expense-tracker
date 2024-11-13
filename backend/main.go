@@ -1,12 +1,13 @@
 package main
 
 import (
-	"expense-tracker/database"
-	"expense-tracker/handlers"
-	"expense-tracker/repositories"
-	"expense-tracker/routes"
-	"expense-tracker/services"
 	"log"
+
+	"github.com/bblueberries/expense-tracker/database"
+	"github.com/bblueberries/expense-tracker/handlers"
+	"github.com/bblueberries/expense-tracker/repositories"
+	"github.com/bblueberries/expense-tracker/routes"
+	"github.com/bblueberries/expense-tracker/services"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"

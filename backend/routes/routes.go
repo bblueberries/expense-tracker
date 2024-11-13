@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"expense-tracker/handlers"
+	"github.com/bblueberries/expense-tracker/handlers"
 
 	"github.com/gofiber/fiber/v2"
 )
