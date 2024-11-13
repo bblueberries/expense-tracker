@@ -1,4 +1,4 @@
-module github.com/bblueberries/expense-tracker
+module github.com/bblueberries/expense-tracker/backend
 
 go 1.22.2
 

@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/bblueberries/expense-tracker/database"
-	"github.com/bblueberries/expense-tracker/handlers"
-	"github.com/bblueberries/expense-tracker/repositories"
-	"github.com/bblueberries/expense-tracker/routes"
-	"github.com/bblueberries/expense-tracker/services"
+	"github.com/bblueberries/expense-tracker/backend/database"
+	"github.com/bblueberries/expense-tracker/backend/handlers"
+	"github.com/bblueberries/expense-tracker/backend/repositories"
+	"github.com/bblueberries/expense-tracker/backend/routes"
+	"github.com/bblueberries/expense-tracker/backend/services"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"

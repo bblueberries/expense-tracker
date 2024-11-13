@@ -3,9 +3,9 @@ package handlers
 import (
 	"log"
 
-	"github.com/bblueberries/expense-tracker/models/userModels"
-	"github.com/bblueberries/expense-tracker/response"
-	"github.com/bblueberries/expense-tracker/services"
+	"github.com/bblueberries/expense-tracker/backend/models/userModels"
+	"github.com/bblueberries/expense-tracker/backend/response"
+	"github.com/bblueberries/expense-tracker/backend/services"
 
 	"github.com/gofiber/fiber/v2"
 )

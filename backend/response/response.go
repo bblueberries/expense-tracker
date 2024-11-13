@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/bblueberries/expense-tracker/models"
+	"github.com/bblueberries/expense-tracker/backend/models"
 
 	"github.com/gofiber/fiber/v2"
 )

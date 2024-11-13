@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bblueberries/expense-tracker/models/userModels"
+	"github.com/bblueberries/expense-tracker/backend/models/userModels"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

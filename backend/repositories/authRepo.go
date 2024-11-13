@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/bblueberries/expense-tracker/models/userModels"
+	"github.com/bblueberries/expense-tracker/backend/models/userModels"
 	"gorm.io/gorm"
 )
 
