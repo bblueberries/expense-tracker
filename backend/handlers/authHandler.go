@@ -11,6 +11,7 @@ import (
 )
 type IAuthHandler interface {
     Register(c *fiber.Ctx) error
+    Login(c *fiber.Ctx) error
 }
 
 type AuthHandler struct {
@@ -41,4 +42,25 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 
     return response.Success(c,fiber.StatusCreated,"user registered successfully!",nil)
    
+}
+
+func (h *AuthHandler) Login(c *fiber.Ctx) error {
+    var input userModels.LoginRequest
+
+    //handle data 
+    if err := c.BodyParser(&input); err != nil {
+        return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
+    }
+
+    //gen token
+    token, err := h.AuthService.LoginUser(input)
+    if err != nil {
+        return response.Error(c, fiber.StatusUnauthorized, "Invalid username or password")
+    }
+
+    loginResponse := userModels.LoginResponse{
+        Token:   token,
+    }
+
+    return response.Success(c,fiber.StatusOK,"Login successfully",loginResponse)
 }

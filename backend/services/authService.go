@@ -5,12 +5,12 @@ import (
 
 	"github.com/bblueberries/expense-tracker/backend/models/userModels"
 	"github.com/bblueberries/expense-tracker/backend/repositories"
-
 	"github.com/bblueberries/expense-tracker/backend/utils"
 )
 
 type IAuthService interface {
     RegisterUser(registerReq userModels.RegisterRequest) error
+    LoginUser(input userModels.LoginRequest) (string, error)
 }
 
 type AuthService struct {
@@ -25,7 +25,7 @@ func NewAuthService(userRepo repositories.IAuthRepository) IAuthService {
 
 func (s *AuthService) RegisterUser(registerReq userModels.RegisterRequest) error {
 	//check if user exist?
-    if exists, _ := s.userRepo.UserExists(registerReq.Username, registerReq.Email); exists {
+    if exists, _ := s.userRepo.UserExists(registerReq.Username); exists {
         return errors.New("user already exists")
     }
 
@@ -43,5 +43,26 @@ func (s *AuthService) RegisterUser(registerReq userModels.RegisterRequest) error
     }
 
     return s.userRepo.CreateUser(user)
+}
+
+func (s *AuthService) LoginUser(input userModels.LoginRequest) (string, error) {
+    // get user by username
+    user, err := s.userRepo.GetUserByUsername(input.Username)
+    if err != nil {
+        return "", errors.New("invalid username or password")
+    }
+
+    // check hash
+    if !utils.CheckPasswordHash(input.Password, user.PasswordHash) {
+        return "", errors.New("invalid username or password")
+    }
+
+    // generate JWT
+    token, err := utils.GenerateJWTToken(user)
+    if err != nil {
+        return "", errors.New("could not generate authentication token")
+    }
+
+    return token, nil
 }
 

@@ -10,6 +10,6 @@ func SetupRoutes(app *fiber.App, authHandler handlers.IAuthHandler) {
 
     userGroup := app.Group("/user")
     userGroup.Post("/register", authHandler.Register)
-    
+    userGroup.Post("/login",authHandler.Login)
 
 }

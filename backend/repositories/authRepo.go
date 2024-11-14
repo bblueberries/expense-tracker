@@ -6,8 +6,9 @@ import (
 )
 
 type IAuthRepository interface {
-    UserExists(username, email string) (bool, error)
+    UserExists(username string) (bool, error)
     CreateUser(user userModels.User) error
+    GetUserByUsername(username string) (*userModels.User, error)
 }
 
 type AuthRepository struct {
@@ -20,11 +21,12 @@ func NewAuthRepository(db *gorm.DB) IAuthRepository {
     }
 }
 
-func (r *AuthRepository) UserExists(username, email string) (bool, error) {
+func (r *AuthRepository) UserExists(username string) (bool, error) {
 	var count int64
 
+    //in case username and email, individual is not unique, (rn username unique) 
     err := r.db.Model(&userModels.User{}).
-        Where("username = ? AND email = ?", username, email).
+        Where("username = ?", username).
         Count(&count).
         Error
 
@@ -37,4 +39,14 @@ func (r *AuthRepository) UserExists(username, email string) (bool, error) {
 
 func (r *AuthRepository) CreateUser(user userModels.User) error {
     return r.db.Create(&user).Error
+}
+
+func (r *AuthRepository) GetUserByUsername(username string) (*userModels.User, error) {
+    var user userModels.User
+    err := r.db.Model(&userModels.User{}).
+    Where("username = ?", username).First(&user).Error
+    if err != nil {
+        return nil, err
+    }
+    return &user, nil
 }
