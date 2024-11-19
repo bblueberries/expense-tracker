@@ -52,7 +52,7 @@ func (s *AuthService) LoginUser(input userModels.LoginRequest) (string, error) {
         return "", errors.New("invalid username or password")
     }
 
-    // check hash
+    // compare hash
     if !utils.CheckPasswordHash(input.Password, user.PasswordHash) {
         return "", errors.New("invalid username or password")
     }

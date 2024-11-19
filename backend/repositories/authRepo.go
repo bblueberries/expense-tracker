@@ -50,3 +50,4 @@ func (r *AuthRepository) GetUserByUsername(username string) (*userModels.User, e
     }
     return &user, nil
 }
+
