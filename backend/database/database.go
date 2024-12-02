@@ -2,9 +2,8 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"os"
-
-	"github.com/bblueberries/expense-tracker/backend/models/userModels"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -23,12 +22,12 @@ func ConnectDB() (*gorm.DB, error) {
 
     db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
     if err != nil {
-        return nil, err
-    }
+		log.Printf("Failed to connect to database: %v", err)
+		return nil, err
+	}
 
-    err = db.AutoMigrate(&userModels.User{})
-    if err != nil {
-        return nil, fmt.Errorf("failed to auto-migrate models: %w", err)
-    }
+
+    RunMigrations(db)
+    
     return db, nil
 }

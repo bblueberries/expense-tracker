@@ -45,15 +45,15 @@ func (s *AuthService) RegisterUser(registerReq userModels.RegisterRequest) error
     return s.userRepo.CreateUser(user)
 }
 
-func (s *AuthService) LoginUser(input userModels.LoginRequest) (string, error) {
+func (s *AuthService) LoginUser(loginReq userModels.LoginRequest) (string, error) {
     // get user by username
-    user, err := s.userRepo.GetUserByUsername(input.Username)
+    user, err := s.userRepo.GetUserByUsername(loginReq.Username)
     if err != nil {
         return "", errors.New("invalid username or password")
     }
 
     // compare hash
-    if !utils.CheckPasswordHash(input.Password, user.PasswordHash) {
+    if !utils.CheckPasswordHash(loginReq.Password, user.PasswordHash) {
         return "", errors.New("invalid username or password")
     }
 

@@ -29,8 +29,12 @@ func main() {
     authService := services.NewAuthService(authRepo)
     authHandler := handlers.NewAuthHandler(authService)
 
+    transactionRepo := repositories.NewTransactionRepository(db)
+    transactionService := services.NewTransactionService(transactionRepo)
+    transactionHandler := handlers.NewTransactionHandler(transactionService)
 
-    routes.SetupRoutes(app, authHandler)
+
+    routes.SetupRoutes(app, authHandler,transactionHandler)
 
 
     log.Fatal(app.Listen(":3000"))
