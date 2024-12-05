@@ -9,6 +9,7 @@ type ITransactionRepository interface {
     CreateTransaction(transaction transactionModels.Transaction) error
     TransactionExists(transactionID string,userID string) (bool, error)
     DeleteTransaction(transactionID string) error
+    UpdateTransaction(transactionID string, updatedTransaction transactionModels.Transaction) error
 }
 
 
@@ -44,3 +45,14 @@ func (r *TransactionRepository) DeleteTransaction(transactionID string) error {
     return nil
 }
 
+func (r *TransactionRepository) UpdateTransaction(transactionID string, updatedTransaction transactionModels.Transaction) error {
+    // Perform the update
+    err := r.db.Model(&transactionModels.Transaction{}).
+        Where("id = ?", transactionID).
+        Updates(updatedTransaction).Error
+
+    if err != nil {
+        return err
+    }
+    return nil
+}

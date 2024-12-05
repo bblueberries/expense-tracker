@@ -14,6 +14,7 @@ import (
 type ITransactionHandler interface {
     AddTransaction(c *fiber.Ctx) error
     DeleteTransaction(c *fiber.Ctx) error
+    UpdateTransaction(c *fiber.Ctx) error
 }
 
 type TransactionHandler struct {
@@ -63,4 +64,29 @@ func (h *TransactionHandler) DeleteTransaction(c *fiber.Ctx) error {
     }
 
     return response.Success(c, fiber.StatusOK, "Transaction deleted successfully", nil)
+}
+
+func (h *TransactionHandler) UpdateTransaction(c *fiber.Ctx) error {
+    // Get the transaction ID from the URL
+    transactionID := c.Params("id")
+
+    // Extract the user ID from the token
+    userID, err := utils.GetUserIDFromToken(c)
+    if err != nil {
+        return response.Error(c, fiber.StatusUnauthorized, "Unauthorized: Invalid token")
+    }
+
+    // Parse the request body
+    var transactionReq transactionModels.TransactionRequest
+    if err := c.BodyParser(&transactionReq); err != nil {
+        return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
+    }
+
+    // Call the service to update the transaction
+    err = h.TransactionService.UpdateTransaction(transactionID, userID, transactionReq)
+    if err != nil {
+        return response.Error(c, fiber.StatusBadRequest, err.Error())
+    }
+
+    return response.Success(c, fiber.StatusOK, "Transaction updated successfully!", nil)
 }

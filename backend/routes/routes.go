@@ -17,7 +17,7 @@ func SetupRoutes(app *fiber.App, authHandler handlers.IAuthHandler,transactionHa
     transactionGroup := app.Group("/transaction").Use(middlewares.AuthorizationUserToken())
     transactionGroup.Post("",transactionHandler.AddTransaction)
     transactionGroup.Delete("/:id",transactionHandler.DeleteTransaction)
-    
+    transactionGroup.Put("/:id",transactionHandler.UpdateTransaction)
 
     
 }

@@ -11,6 +11,7 @@ import (
 type ITransactionService interface {
     AddTransaction(transactionReq transactionModels.TransactionRequest) error
     DeleteTransaction(transactionID string,userID string) error
+    UpdateTransaction(transactionID string, userID string, transactionReq transactionModels.TransactionRequest) error
 }
 
 type TransactionService struct {
@@ -63,6 +64,31 @@ func (s *TransactionService) DeleteTransaction(transactionID string, userID stri
     err = s.transactionRepo.DeleteTransaction(transactionID)
     if err!= nil {
         return errors.New("failed to delete Transaction")
+    }
+    return nil
+}
+
+func (s *TransactionService) UpdateTransaction(transactionID string, userID string, transactionReq transactionModels.TransactionRequest) error {
+    // Check if the transaction exists and belongs to the user
+    exists, err := s.transactionRepo.TransactionExists(transactionID, userID)
+    if err != nil {
+        return errors.New("failed to check transaction existence")
+    }
+    if !exists {
+        return errors.New("transaction not found or not your transaction")
+    }
+
+    updatedTransaction := transactionModels.Transaction{
+        Type:        transactionReq.Type,
+        Amount:      transactionReq.Amount,
+        Description: transactionReq.Description,
+        Date:        transactionReq.Date,
+    }
+
+    // Perform the update
+    err = s.transactionRepo.UpdateTransaction(transactionID, updatedTransaction)
+    if err != nil {
+        return errors.New("failed to update transaction")
     }
     return nil
 }
