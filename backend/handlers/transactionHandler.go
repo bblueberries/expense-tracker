@@ -12,6 +12,7 @@ import (
 
 type ITransactionHandler interface {
     AddTransaction(c *fiber.Ctx) error
+    DeleteTransaction(c *fiber.Ctx) error
 }
 
 type TransactionHandler struct {
@@ -38,4 +39,18 @@ func (h *TransactionHandler) AddTransaction(c *fiber.Ctx) error {
     }
 
     return response.Success(c, fiber.StatusCreated, "Transaction added successfully!", nil)
+}
+
+func (h *TransactionHandler) DeleteTransaction(c *fiber.Ctx) error {
+    id := c.Params("id") // Get transaction ID from URL
+    if id == "" {
+        return response.Error(c, fiber.StatusBadRequest, "Transaction ID is required")
+    }
+
+    err := h.TransactionService.DeleteTransaction(id)
+    if err != nil {
+        return response.Error(c, fiber.StatusInternalServerError, err.Error())
+    }
+
+    return response.Success(c, fiber.StatusOK, "Transaction deleted successfully", nil)
 }

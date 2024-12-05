@@ -22,6 +22,5 @@ func AuthError(c *fiber.Ctx, err error) error {
    
 }
 func AuthSuccess(c *fiber.Ctx) error { 
-    c.Locals("authSuccess", true) 
     return c.Next()              
 }

@@ -11,6 +11,7 @@ import (
 type IAuthService interface {
     RegisterUser(registerReq userModels.RegisterRequest) error
     LoginUser(input userModels.LoginRequest) (string, error)
+    
 }
 
 type AuthService struct {

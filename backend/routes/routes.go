@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/bblueberries/expense-tracker/backend/handlers"
+	"github.com/bblueberries/expense-tracker/backend/middlewares"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,8 +14,10 @@ func SetupRoutes(app *fiber.App, authHandler handlers.IAuthHandler,transactionHa
     userGroup.Post("/login",authHandler.Login)
 
 
-    transactionGroup := app.Group("/transaction")
+    transactionGroup := app.Group("/transaction").Use(middlewares.AuthorizationUserToken())
     transactionGroup.Post("",transactionHandler.AddTransaction)
+    transactionGroup.Delete("/:id",transactionHandler.DeleteTransaction)
+    
 
     
 }

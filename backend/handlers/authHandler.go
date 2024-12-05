@@ -64,3 +64,4 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 
     return response.Success(c,fiber.StatusOK,"Login successfully",loginResponse)
 }
+
