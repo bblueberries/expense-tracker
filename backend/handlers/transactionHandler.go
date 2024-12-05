@@ -6,6 +6,7 @@ import (
 	"github.com/bblueberries/expense-tracker/backend/models/transactionModels"
 	"github.com/bblueberries/expense-tracker/backend/response"
 	"github.com/bblueberries/expense-tracker/backend/services"
+	"github.com/bblueberries/expense-tracker/backend/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -31,7 +32,14 @@ func (h *TransactionHandler) AddTransaction(c *fiber.Ctx) error {
     if err := c.BodyParser(&transactionReq); err != nil {
         return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
     }
+	// Get user_id from the token
+	userID, err := utils.GetUserIDFromToken(c)
+	if err != nil {
+		return response.Error(c, fiber.StatusUnauthorized, "Unauthorized: Invalid token")
+	}
 
+	// Set the user_id in the transaction request
+	transactionReq.UserID = userID
     // Call service to add the transaction
     if err := h.TransactionService.AddTransaction(transactionReq); err != nil {
         log.Println("Error adding transaction:", err)
