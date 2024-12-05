@@ -10,7 +10,7 @@ import (
 
 type ITransactionService interface {
     AddTransaction(transactionReq transactionModels.TransactionRequest) error
-    DeleteTransaction(transactionID string) error
+    DeleteTransaction(transactionID string,userID string) error
 }
 
 type TransactionService struct {
@@ -49,18 +49,22 @@ func (s *TransactionService) AddTransaction(transactionReq transactionModels.Tra
 
     return s.transactionRepo.CreateTransaction(transaction)
 }
-func (s *TransactionService) DeleteTransaction(transactionID string) error {
+func (s *TransactionService) DeleteTransaction(transactionID string, userID string) error {
     // Check if transaction exists
-    exists, err := s.transactionRepo.TransactionExists(transactionID)
+    exists, err := s.transactionRepo.TransactionExists(transactionID,userID)
     if err != nil {
         return errors.New("failed to check transaction existence")
     }
     if !exists {
-        return errors.New("transaction not found")
+        return errors.New("transaction not found or not your transactions")
     }
 
     // Perform deletion
-    return s.transactionRepo.DeleteTransaction(transactionID)
+    err = s.transactionRepo.DeleteTransaction(transactionID)
+    if err!= nil {
+        return errors.New("failed to delete Transaction")
+    }
+    return nil
 }
 
 

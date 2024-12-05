@@ -7,7 +7,7 @@ import (
 
 type ITransactionRepository interface {
     CreateTransaction(transaction transactionModels.Transaction) error
-    TransactionExists(transactionID string) (bool, error)
+    TransactionExists(transactionID string,userID string) (bool, error)
     DeleteTransaction(transactionID string) error
 }
 
@@ -28,9 +28,9 @@ func (r *TransactionRepository) CreateTransaction(transaction transactionModels.
     return r.db.Create(&transaction).Error
 }
 
-func (r *TransactionRepository) TransactionExists(transactionID string) (bool, error) {
+func (r *TransactionRepository) TransactionExists(transactionID string,userID string) (bool, error) {
     var count int64
-    err := r.db.Model(&transactionModels.Transaction{}).Where("id = ?", transactionID).Count(&count).Error
+    err := r.db.Model(&transactionModels.Transaction{}).Where("id = ? AND user_id = ?", transactionID,userID).Count(&count).Error
     if err != nil {
         return false, err
     }
@@ -38,5 +38,9 @@ func (r *TransactionRepository) TransactionExists(transactionID string) (bool, e
 }
 
 func (r *TransactionRepository) DeleteTransaction(transactionID string) error {
-    return r.db.Delete(&transactionModels.Transaction{}, "id = ?", transactionID).Error
+    if err := r.db.Delete(&transactionModels.Transaction{}, transactionID).Error; err != nil {
+        return err
+    }
+    return nil
 }
+

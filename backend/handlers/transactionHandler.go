@@ -37,8 +37,6 @@ func (h *TransactionHandler) AddTransaction(c *fiber.Ctx) error {
 	if err != nil {
 		return response.Error(c, fiber.StatusUnauthorized, "Unauthorized: Invalid token")
 	}
-
-	// Set the user_id in the transaction request
 	transactionReq.UserID = userID
     // Call service to add the transaction
     if err := h.TransactionService.AddTransaction(transactionReq); err != nil {
@@ -54,8 +52,12 @@ func (h *TransactionHandler) DeleteTransaction(c *fiber.Ctx) error {
     if id == "" {
         return response.Error(c, fiber.StatusBadRequest, "Transaction ID is required")
     }
+    userID, err := utils.GetUserIDFromToken(c)
+	if err != nil {
+		return response.Error(c, fiber.StatusUnauthorized, "Unauthorized: Invalid token")
+	}
 
-    err := h.TransactionService.DeleteTransaction(id)
+    err = h.TransactionService.DeleteTransaction(id,userID)
     if err != nil {
         return response.Error(c, fiber.StatusInternalServerError, err.Error())
     }
